@@ -1,0 +1,35 @@
+body {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    height:100vh;
+}
+
+/* .container{
+    position: relative;
+    width: 75vw;
+    height: 75vh;
+} */
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+  }
+
+  .container {
+    position: relative;
+    width: 100vw;
+    height: calc(100vh - 10px);
+    background: rgba(244, 163, 70, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .container2 {
+    width: 800px;
+    padding: 20px;
+    border-radius: 20px;
+    border: solid 3px rgb(247, 213, 87);
+    background: white;
+  }
