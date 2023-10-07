@@ -8,7 +8,7 @@ const labels = [
 const data = {
     labels,
     datasets: [{
-        label: "Fire",
+        label: "Number of Fires",
         data: [3000, 
             10000, 
             7000, 
