@@ -1,69 +1,79 @@
-// const ch =  document.querySelector('#myChart').getContext("2d");
-const ch =  document.getElementById('myChart').getContext("2d");
+// const ch = document.querySelector('#myChart').getContext("2d");
 
-const labels = [
-    'Asia', 'Africa','North America', 'South America', 'Europe', 'Australia', 'Antartica',
-];
+// function createChart(data) {
+const ch = document.getElementById('myChart').getContext("2d");
 
-const data = {
-    labels,
-    datasets: [{
-        label: "Number of Fires",
-        data: [3000, 
-            10000, 
-            7000, 
-            4000, 
-            2000, 
-            15000,
-            0
-        ],
-        backgroundColor: [
-            // 'rgba(255, 26, 104, 0.2)',
-            // 'rgba(54, 162, 235, 0.2)',
-            // 'rgba(255, 206, 86, 0.2)',
-            // 'rgba(75, 192, 192, 0.2)',
-            // 'rgba(153, 102, 255, 0.2)',
-            // 'rgba(255, 159, 64, 0.2)',
-            // 'rgba(0, 0, 0, 0.2)'
-            'rgba(255, 206, 86, 0.5)',
-            'rgba(255, 159, 64, 0.5)',
-            'rgba(255, 206, 86, 0.5)',
-            'rgba(255, 159, 64, 0.5)',
-            'rgba(255, 206, 86, 0.5)',
-            'rgba(255, 159, 64, 0.5)',
-            'rgba(255, 206, 86, 0.5)',
-          ],
-          borderColor: [
-            // 'rgba(255, 26, 104, 1)',
-            // 'rgba(54, 162, 235, 1)',
-            // 'rgba(255, 206, 86, 1)',
-            // 'rgba(75, 192, 192, 1)',
-            // 'rgba(153, 102, 255, 1)',
-            // 'rgba(255, 159, 64, 1)',
-            // 'rgba(0, 0, 0, 1)'
+async function CountFires(jsonPath) {
+    try {
+        const response = await fetch(jsonPath);
+        const data = await response.json();
 
-            'rgba(255, 206, 86, 1)',
-            'rgba(255, 159, 64, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(255, 159, 64, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(255, 159, 64, 1)',
-            'rgba(255, 206, 86, 1)',
-          ],
-          borderWidth: 1.5
-        // backgroundColor: blue,
-    }, 
-],
-};
+        // Check if data is an array
+        if (Array.isArray(data)) {
+            return data.length;
+        } else {
+            console.error('JSON data is not an array.');
+            return -1;
+        }
+    } catch (error) {
+        console.error('Error fetching JSON:', error);
+        return -1;
+    }
+}
 
-const config = {
- type: 'bar',
- data: data,
- options: {
-    responsive: true,
- },
-};
+// Example usage:
+const AUS = 'data/AUSdata.json';  // Replace with the actual path
+const BRA = 'data/BRAdata.json';
+const USA = 'data/USAdata.json';
+const VIIRS = 'data/VIIRS.json';
 
-const myChart = new Chart(ch, config)
+// Use async/await to wait for the data before creating the chart
+async function initializeChart() {
+    const countA = await CountFires(AUS);
+    const countB = await CountFires(BRA);
+    const countC = await CountFires(USA);
+    const countD = await CountFires(VIIRS);
 
-const jsonFilePath = '../data/json/AUSdata.json';
+    const labels = [
+        'Australia', 'Brazil', 'USA', 'Other'
+    ];
+
+    const data = {
+        labels,
+        datasets: [{
+            label: "Number of Fires",
+            data: [
+                countA,
+                countB,
+                countC,
+                countD,
+            ],
+            backgroundColor: [
+                'rgba(255, 206, 86, 0.5)',
+                'rgba(255, 159, 64, 0.5)',
+                'rgba(255, 206, 86, 0.5)',
+                'rgba(255, 159, 64, 0.5)',
+            ],
+            borderColor: [
+                'rgba(255, 206, 86, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(255, 159, 64, 1)',
+            ],
+            borderWidth: 1.5
+        }],
+    };
+
+    const config = {
+        type: 'bar',
+        data: data,
+        options: {
+            responsive: true,
+        },
+    };
+
+    const myChart = new Chart(ch, config);
+}
+
+// Call the function to initialize the chart
+initializeChart();
